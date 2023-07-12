@@ -5,9 +5,7 @@ const User = require("../models/User");
 exports.auth = async (req, res, next) => {
   try {
     const token =
-      req.cookies.token ||
-      req.body.token ||
-      req.header("Authorisation").replace("Bearer ", "");
+      req.cookies.token || req.body.token || req.header("Authorisation").replace("Bearer ", "");
 
     if (!token) {
       return res.status(401).json({
@@ -15,7 +13,7 @@ exports.auth = async (req, res, next) => {
         message: "Token in missing",
       });
     }
-
+ 
     try {
       const decode = jwt.verify(token, process.env.JWT_SECRET);
       console.log(decode);
@@ -37,12 +35,13 @@ exports.auth = async (req, res, next) => {
 
 exports.isStudent = async (req, res, next) => {
   try {
-    if (req.user.accoutType != "Student") {
+    if (req.user.accountType != "Student") {
       return res.status(401).json({
         success: false,
         message: "User role cannot be verified, please try again",
       });
     }
+    next();
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -51,9 +50,9 @@ exports.isStudent = async (req, res, next) => {
   }
 };
 
-exports.isInstructor = async (req, res, nest) => {
+exports.isInstructor = async (req, res, next) => {
   try {
-    if (req.user.accoutType !== "Instructor") {
+    if (req.user.accountType !== "Instructor") {
       return res.status(401).json({
         success: false,
         message: "This is a protected route for Students only",
@@ -69,8 +68,8 @@ exports.isInstructor = async (req, res, nest) => {
 };
 
 exports.isAdmin = async (req, res, next) => {
-  try {
-    if (req.user.accoutType !== "Admin") {
+  try {  console.log(req.user.accoutType);
+    if (req.user.accountType !== "Admin") {
       return res.status(401).json({
         success: false,
         message: "This is a proctected route for Admin only",

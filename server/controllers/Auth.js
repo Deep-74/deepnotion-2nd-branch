@@ -62,7 +62,7 @@ exports.signup = async (req, res) => {
 			// OTP not found for the email
 			return res.status(400).json({
 				success: false,
-				message: "The OTP is not valid",
+				message: "The OTP is not vaalid",
 			});
 		} else if (otp !== response[0].otp) {
 			// Invalid OTP
@@ -134,7 +134,7 @@ exports.login = async (req, res) => {
 		// If user not found with provided email
 		if (!user) {
 			// Return 401 Unauthorized status code with error message
-			 console.log(user)
+			 //console.log(user)
 			return res.status(401).json({
 				success: false,
 				message: `User is not Registered with Us Please SignUp to Continue`,
@@ -144,7 +144,7 @@ exports.login = async (req, res) => {
 		// Generate JWT token and Compare Password
 		if (await bcrypt.compare(password, user.password)) {
 			const token = jwt.sign(
-				{ email: user.email, id: user._id, role: user.role },
+				{ email: user.email, id: user._id, accountType: user.accountType },
 				process.env.JWT_SECRET,
 				{
 					expiresIn: "24h",

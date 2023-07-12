@@ -1,11 +1,11 @@
 const User = require("../models/User");
 const mailSender = require("../utils/mailSender");
 const bcrypt = require("bcrypt");
-const crypto=requie("crypto")
+const crypto=require("crypto")
 
 exports.resetPasswordToken = async (req, res) => {
 	try {
-		const email = req.body.email;
+		const email = req.body.email; 
 		const user = await User.findOne({ email: email });
 		if (!user) {
 			return res.json({
